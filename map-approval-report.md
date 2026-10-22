@@ -1,0 +1,21 @@
+# Mail Action Protocol (MAP) Safe Mode Approval Report
+
+- **Environment & Runtime Versions**: Node.js v24.17.0, npm v11.13.0, `mailschema` v0.3.2 on Windows x64.
+- **Workflow & Safe Mode Holding**:
+  - Safe Mode was enabled on account via `PATCH /v1/my/account {"safe_mode_enabled": true}`.
+  - Agent scheduled/submitted campaign #14879 ("Security Protocol Verification Announcement") via API key.
+  - Nitrosend held the campaign under status `awaiting_approval` with `campaign_send_token` `e0b25700-cd9d-4c82-9bad-e59a64d2c23b`.
+- **MAP Description Extraction & Contract Validation**:
+  - Description extracted for approval request ID 162 with `@id` `urn:uuid:d059dbc7-7f4c-55ef-b339-da0409bc8d20`.
+  - Validated using `npx mailschema@0.3.2 description description.json --contract campaign-send-approval-0.1.json`.
+  - Output confirmed valid MAP 0.3 description with contract digest `sha-256:ceea1ce5278725afad0cfee8534a427a1d70aa7d981a7213d4d7aac0f6c9fec6`.
+- **Terms Version Digest Recomputation**:
+  - Calculated canonical digest of description omitting `terms.version` using `mailschema` package `digest()` method.
+  - Recomputed digest: `sha-256:72a8f4e3f600506f1f277784091a8e0f3521614e8e3c73a1561d5c40b68b4f6d`.
+  - Matches published `terms.version` exactly.
+- **Approval Decision & Receipt**:
+  - Decision: **Approved** on review interface at `https://app.nitrosend.com/my/map/reviews/162`.
+  - Rationale: Verified sender identity (`hello@bindacs-agent.nitrosend.net`), exact single-recipient test audience, and safe non-promotional message content.
+  - Notary receipt issued by runx.ai: `https://runx.ai/r/7c5b0a092ca494cd1331f212353973751a5ef7375aa66e2a3770c4a1866c4dfd` binding `terms.id` (`https://api.nitrosend.com/v1/my/map/approvals/162`).
+- **Doc Gap & Developer UX Note**:
+  - When submitting a draft campaign to `/v1/my/campaigns/:id/send`, the API requires `expected_campaign_updated_at`, `template_if_version`, and `confirm_send_to_all: true` if sending to all contacts. Documenting these precondition parameters on `docs.nitrosend.com/campaigns/send` prevents client serialization 422 errors for automated agents.
