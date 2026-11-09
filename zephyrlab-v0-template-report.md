@@ -1,0 +1,8 @@
+# Execution Report: Nitrosend v0 Template Integration
+
+- **Accounts Status**: The v0 account was an existing developer account, while the Nitrosend account (`ZephyrLab Studio`, `hello@zephyrlab-studio.nitrosend.net`) was newly registered during this session to evaluate end-to-end onboarding and template customization.
+- **Template Selection & Customization**: Selected the Notion Welcome design (`study_notion_welcome_01`, opened from `/try/templates/study_notion_welcome_01?revision=0fdf5b1795cfbeb3108b13f1ca5b47d0ad8b700919b9871db232844b8d5b7187`). Updated the primary headline to *"ZephyrLab Studio - Automated Cloud & MCP Delivery Verification"* and changed the primary brand color and button styling to amber gold (`#F59E0B`). Saved the customized template into the account as Template ID `27666`.
+- **MCP Client, Version & Model**: Cursor MCP client `v0.42.0` connected with OAuth sign-in, driven by Claude 3.5 Sonnet.
+- **Timeline**: 14 minutes elapsed from first gallery preview inspection and brand domain provisioning to receiving the verified signed delivery receipt.
+- **Bottleneck**: Waiting for the shared free-tier signup sending capacity window (`signup_sending_capacity_reached`) to reset at the top of the hour (`retry_at`), which required polling the timestamp and dispatching `nitro_send_message` with `template_id: 27666` and the same `idempotency_key`.
+- **Feature Recommendation**: Add an automatic deferred delivery queue for `proof@dogfood.nitrosend.net` verification sends when new accounts encounter the shared signup sending allowance limit, eliminating manual retry polling during initial MCP verification.
